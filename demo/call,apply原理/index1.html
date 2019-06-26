@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // call原理的实现
+        Function.prototype.newCall = function () {
+            //兼容性的处理
+            var ctx = arguments[0] || window
+            ctx.fn = this
+            var arr = []
+            for (var i = 1; i < arguments.length; i++) {
+                // 将参数数组的内容传送到新建的数组arr[]当中
+                arr.push('arguments[' + i + ']')
+            }
+            //使用eval()来执行ctx.fn()并在数组中添加符号','
+            var result = eval('ctx.fn(' + arr.join(',') + ')')
+            // 删除ctx.fn
+            delete ctx.fn
+            return result
+        }
+
+        // apply的原理实现
+        Function.protype.newApply = function (ctx, arr) {
+            var ctx = ctx || window
+            ctx.fn = this
+            if (!arr) {
+                var result = ctx.fn()
+                delete ctx.fn
+                return result
+            } else {
+                var args = []
+                for (var i = 0; i < arr.length; i++) {
+                    args.push('arr[' + i + ']')
+                }
+                var result = eval('ctx.fn(' + args.join(',') + ')')
+                delete ctx.fn
+                return result
+            }
+        }
+    </script>
+</body>
+
+</html>

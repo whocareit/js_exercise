@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <input type="text" id = 'inp'/>
+    <script>
+
+        //抖动，函数在频繁触发时，在等待一段时间后执行一次的行为叫做抖动
+        //主要的原理是去设置一个定时器然后去解决
+        var oIput = document.getElementById('inp')
+        // var timer = null
+        function ajax(e){
+            console.log(e,this.value)
+        }
+
+        // oIput.oninput = function(e){
+        //     //为了获取到此时的this与arguments
+        //     var _self = this, _args = arguments
+        //     clearTimeout(timer);
+        //     timer = setTimeout(function(){
+        //         ajax.apply(_self,_args)
+        //     },1000)
+        // }
+
+        //下面就是对于抖动函数的封装
+        function debounce(handler,delay){
+            var timer = null
+            return function() {
+                var _self = this, _args = arguments
+                clearTimeout(timer)
+                timer = setTimeout(function(){
+                    handler.apply(_self,_args)
+                },delay)
+            }
+        }
+
+        oIput.oninput = debounce(ajax,1000)
+    </script>
+</body>
+</html>

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        .wrapper{
+            height: 200px;
+            width: 200px;
+            border: 1px solid black;
+            margin: 100px auto;
+            perspective: 1000;
+        }
+        img{
+            width: 200px;
+            height: 200px;
+        }
+        .box{
+            transform-style: preserve-3d;
+            width: 200px;
+            height: 200px;
+            position: absolute;
+            transform-origin: 100px 100px -100px;
+            animation: 200ms ease-out 0ms 3 normal forwards;
+        }
+        .show,.hide{
+            width: 200px;
+            height: 200px;
+            position: absolute;
+        }
+        .hide{
+            transform: translate3d(0,0,-1px);
+            width: 200px;
+            opacity: 0.3;
+            height: 200px;
+            text-align: center;
+            line-height: 200px;
+            background-color: black;
+            color: #fff;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        /* hide位置变化 */
+        .in-top .wrapper{
+            transform-origin: 0% 100%; 
+            transform: translate3d(0,-100%,0) rotate3d(1,0,0,90deg);
+        }
+        .in-top .box{
+            animation-name: in-top;
+            animation-play-state: running; 
+        }
+        .out-top .box{
+            animation-name: out-top;
+            animation-play-state: running; 
+        }
+
+        @keyframes in-top{
+            from{
+                transform: rotate3d(0,0,0,0deg)
+            }
+            to{
+                transform: rotate3d(-1,0,0,90deg)
+            }
+        }
+        @keyframes out-top{
+            from{
+                transform: rotate3d(-1,0,0,90deg)
+            }
+            to{
+                transform: rotate3d(0,0,0,0deg)
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class= "wrapper  in-top">
+        <div class= "box">
+            <div class = "show">
+                <img src = "./pic.jpg" alt = ""/>
+            </div>
+            <div class = "hide">this is a words</div>
+        </div>
+    </div>
+</body>
+</html>

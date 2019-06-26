@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        // 函数柯里化方法的原理
+        function add(a,b,c,d){
+            return a + b + c + d;
+        }
+        //实现参数两个部分转化为一部分的函数实现
+        function  FixedParmasCurry(fn){
+            //从传入的参数后面的第一位开始返回数组
+            var _args = [].slice.call(arguments,1);
+            return function() {
+                var newArgs = _args.concat([].slice.call(arguments,0))
+                return fn.apply(this,newArgs);
+            }
+        }
+        //  实现参数两部分转化为一部分的操作过程
+        // var newAdd = FixedParmasCurry(add,2,3);
+        // newAdd(3,4)
+
+        //接下来的部分就是实现将参数转化为多个部分直到符合参数的个数
+        function newCurry(fn,length){
+            var length = length || fn.length;
+            return function(){
+                if(arguments.length < length){
+                    var combined = [fn].concat([].slice.call(arguments,0))
+                    return newCurry(FixedParmasCurry.apply(this,combined),length - arguments.length);
+                }else{
+                    return fn.apply(this,arguments)
+                }
+            }
+        }
+        var newAdd = newCurry(add);
+    </script>
+</body>
+</html>

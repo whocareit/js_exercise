@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        * {
+            margin: 0;
+        }
+    
+        a {
+            text-decoration: none;
+        }
+    
+        .wrapper {
+            width: 800px;
+            position: absolute;
+            left: 50px;
+            bottom: 100px;
+            text-align: center;
+        }
+        img {
+            width: 64px;
+            height: 64px;
+        }
+    </style>   
+</head>
+<body>
+    <div class="wrapper">
+        <a href="javascript:void(0)">
+            <img src="./1.jpg" alt="">
+        </a>
+        <a href="javascript:void(0)">
+            <img src="./2.jpg" alt="">
+        </a>
+        <a href="javascript:void(0)">
+            <img src="./3.jpg" alt="">
+        </a>
+        <a href="javascript:void(0)">
+            <img src="./5.jpg" alt="">
+        </a>
+        <a href="javascript:void(0)">
+            <img src="./6.jpg" alt="">
+        </a>
+        <a href="javascript:void(0)">
+            <img src="./1.jpg" alt="">
+        </a>
+    </div>
+    <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.8.0.js"></script>
+    <script>
+        // 使用鼠标的move事件来实现移动的过程
+        $(document).on('mousemove',function(e){
+            var event = e || window.event
+            //获取到鼠标移动的位置距离每一个图标中心点的距离
+            function getDir(item){
+                var item = $(item)
+                //获取到每个图标中心点的中心坐标
+                //在jq中获取到的offset的left与width的使用方法是不一样的分别用item.offset().left与item.get(0).offsetWidth表示
+                var x = parseInt(item.offset().left) + parseInt(item.get(0).offsetWidth) / 2
+                var y = parseInt(item.offset().top) + parseInt(item.get(0).offsetHeight) / 2
+                //计算鼠标距离各个中心的距离
+                //abs绝对值运算方法 pow后面的值表示计算多少次方 sqrt表示开根号
+                var disX = Math.abs(event.clientX - x)
+                var disY = Math.abs(event.clientY - y)
+                return Math.sqrt(Math.pow(disX,2) + Math.pow(disY,2)) 
+            }
+            for(var i = 0; i < $('img').length ; i++){
+                var d = getDir($('img')[i])
+                //当d小于200是，这个移动效果就取消
+                d = Math.min(d,200)
+                //最终各点的方法倍数
+                var num = ((200 - d) / 200) * 64 + 64
+                $($('img')[i]).css({
+                    'width': num + 'px',
+                    'height': num + 'px'
+                }) 
+            }
+        })
+    </script>
+</body>
+
+</html>

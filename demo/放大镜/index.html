@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+            *{
+                margin: 0;
+                padding: 0;
+            }
+            .wrapper{
+                margin: 5px;
+                width: 500px;
+                height: 500px;
+                position: relative;
+            }
+            .imgCount{
+                width: 100%;
+                height: 100%;
+            }
+            .img{
+                height: 100%;
+                width: 100%;
+                background-image: url('./1.jpg');
+                background-repeat: no-repeat;
+                background-size: 100% 100%;
+            }
+            .move{
+                position: absolute;
+                cursor: move;
+                background-color: #eee;
+                opacity: 0.3;
+                z-index: 500;
+                display: none;
+            }
+            .imgShow{
+                width: 500px;
+                height: 500px;
+                position: absolute;
+                top: 0;
+                left: 105%;
+                overflow: hidden;
+            }
+        </style>
+</head>
+<body>
+    <!-- 放大镜样式布局，由一个wrapper包裹展示区与图片区，将wrapper设置为相对定位。在图片区内一个移动的鼠标区域与图片区域，将
+        移动的鼠标区的样式设置为绝对定位
+    -->
+    <div class="wrapper">
+        <div class="imgCount">
+            <div class="img"></div>
+            <div class="move"></div>
+        </div>
+        <div class="imgShow">
+            <img  src = 1.jpg alt=""/>
+        </div>
+    </div>
+    <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.8.0.js"></script>
+    <script>
+        // 放大镜功能的实现，在这里使用了jq来进行
+        // 获取dom节点
+        var wrapper = $('.wrapper')
+        var imgCount = $('.imgCount')
+        var moveBox = $('.move')
+        var imgShow = $('.imgShow')
+        //放大镜功能实现需要move与leave操作过程
+        function bindEvent(){
+            imgCount.on('mousemove',function(e){
+                //move()方法用于移动，传入的第二个参数用于控制放大的倍数
+                move(e,2)
+            }).on('mouseleave',function(e){
+                //hide()方法用与去隐藏
+                moveBox.hide()
+                imgShow.hide()
+            })
+        }
+        function move(event,num){
+            var w = 500/num
+            var h = 500/num
+            //移动的过程中，当max与min表示当超过边框时所需的展示坐标的位置
+            var maxL = 500 - w
+            var maxT = 500 - h
+            var minL = 0
+            var minT = 0
+            //此时的X,Y表示中心点坐标的位置
+            var X = event.clientX - wrapper.offset().left - w/2
+            var Y = event.clientY - wrapper.offset().top - h/2
+            //当X与Y的坐标值在最小与最大的坐标值之外时，就取最小与最大的坐标值。
+            var endL = (X > minL) ? (X < maxL) ? X : maxL : minL
+            var endT = (Y > minT) ? (Y < maxT) ? Y : maxT : minT
+            moveBox.css({
+                'height': w + 'px',
+                'width': h + 'px',
+                'display': 'block',
+                'left': endL + 'px',
+                'top': endT + 'px',
+            })
+            imgShow.css({
+                'display': 'block',
+
+            }).find('img').css({
+                'width': num*500 + 'px',
+                'height': num*500 + 'px',
+                'margin-left': -endL*num + 'px',
+                'margin-top': -endT*num + 'px'
+            })
+        }
+        bindEvent()
+    </script>
+</body>
+</html>

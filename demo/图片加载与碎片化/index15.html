@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <!-- 当直接使用img标签时，在加载图片的时候，如果因为网速等影响时，图片的加载过程是一点一点的加载 -->
+    <!-- <img src="http://img5.imgtn.bdimg.com/it/u=3300305952,1328708913&fm=26&gp=0.jpg" alt=""> -->
+    <!-- <button id="click">click</button> -->
+    <ul id="ul"></ul>
+    <script>
+        // 图片的懒加载与预加载
+        // 下面的这种加载方式就是预加载方式，只有当图片加载完成后才使图片显示出来
+        // var oImg = new Image()
+        // oImg.src = 'http://img5.imgtn.bdimg.com/it/u=3300305952,1328708913&fm=26&gp=0.jpg'
+
+        // oImg.onload = function(){
+        //     document.body.appendChild(oImg)
+        // }
+
+        //懒加载方式
+        //下面的这种图片的加载方式就是懒加载方式，只有当点击了click事件后才会进行图片的加载
+        // var click = ducument.getElementById('click')
+        // click.onclick = function () {
+        //     var oImg = new Image()
+        //     oImg.src = 'http://img5.imgtn.bdimg.com/it/u=3300305952,1328708913&fm=26&gp=0.jpg'
+        // }
+
+
+
+        // Math.random()生成一个[0,1)之间的数，Math.floor()表示取整的意思
+
+        //文档碎片
+        //采用下面的这种形式去加载，其页面的内容重新渲染了10000次，这样会减低性能
+        // var ul = document.getElementById('ul')
+        // for( var i = 0; i < 1000; i++){
+        //     var li = document.createElement('li')
+        //     li.innerHTML = i
+        //     ul.appendChild(li)
+        // }
+
+        //采用下面的这种形式，先加载完成，再进行页面的渲染,如果以下面的这种形式，会在html中多了一个层级结构
+        //因此在这里去使用碎片化，用document.createDocumentFragment()来创建碎片化，这种方式不会使html中多一个层级结构
+        var ul = document.getElementById('ul')
+        var farment = document.createDocumentFragment()
+        // var div = document.createElement('div')
+        for( var i = 0; i < 1000; i++){
+            var li = document.createElement('li')
+            li.innerHTML = i
+            // div.appendChild(li)
+            farment.appendChild(li)
+        }
+        ul.appendChild(farment)
+
+        // cdn缓存服务器，能够对数据做一些缓存，缓解服务器的压力
+
+
+    </script>
+</body>
+
+</html>

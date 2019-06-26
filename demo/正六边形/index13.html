@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        .box{
+            height: 100px;
+            width: 173.2px;
+            background-color: blue;
+            position: relative;
+            margin: 200px;
+        }
+        /* 上三角由两边的border与上边的border一起组成，将左右两边的border颜色设置为背景颜色，其影响的三角形的边
+            将上边的border设置为另一种颜色其影响的是三角形的高
+         */
+        .box:before{
+            content: '';
+            display: block;
+            width: 0;
+            height: 0;
+            border-left: 86.2px solid transparent;
+            border-right: 86.2px solid transparent;
+            border-bottom: 50px solid blue;
+            position: absolute;
+            left: 0;
+            top: -50px;
+        }
+        .box:after{
+            content: '';
+            display: block;
+            width: 0;
+            height: 0;
+            border-left: 86.2px solid transparent;
+            border-right: 86.2px solid transparent;
+            border-top: 50px solid blue;
+            position: absolute;
+            left: 0;
+            bottom: -50px;
+        }
+    </style>
+</head>
+<body>
+    <!-- 正六变边型  内角和为360 其余外角为120 其组成可以由一个长方
+    型和上三角形与下三角形组成 -->
+    <div class="box"></div>
+</body>
+</html>

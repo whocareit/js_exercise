@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        //组合函数，将多个函数的功能组合在一起，即组合成一个函数
+
+        //实现两个函数功能之间的组合
+        // function compose(f,g){
+        //     return function(x){
+        //         return f(g(x))
+        //     }
+        // }
+
+        //多个单一函数的功能实现
+        function toUpperCase(str){
+            return str.toUpperCase()
+        }
+        function addStr(str){
+            return str + '!'
+        }
+        function split(str){
+            return str.split('')
+        }
+        function reverse(arr){
+            return arr.reverse()
+        }
+        function join(arr){
+            return arr.join('_')
+        }
+        
+        //组合使用两个函数功能之间的组合
+        var f1 = compose(toUpperCase,addStr)
+        console.log(f1('nihao'))
+
+        //实现多个函数功能之间的组合
+        function compose(){
+            //slice()方法默认方式有两个参数，在这里第一个是arguments参数，第二个是默认的从0开始，因此
+            //这行代码表示的意思是将传入的参数全部以数组的形式给args
+            var args = Array.prototype.slice.call(arguments)
+            var len = args.length - 1
+            return function(x){
+                //表示参数列表中的最后一个函数的执行
+                var result = args[len](x)
+                //遍历参数列表中的函数执行
+                while(len--){
+                    result = args[len](result)
+                }
+                return result
+            }
+        }
+
+        var f = compose(addStr,join,reverse,split,toUpperCase)
+        console.log(f('nihao'))
+
+        //函数组合使用reduce实现,reduceRight是使得数组中的元素从右往左进行
+        function compose1(){
+            var args = Array.prototype.slice.call(arguments)
+            return function(x){
+                return args.reduceRight(function(res,cb){
+                    return cb(res)
+                },x)
+            }
+        }
+
+        var f2 = compose1(addStr,join,reverse,split,toUpperCase)
+        console.log(f2('nnihao'))
+
+    </script>
+</body>
+</html>

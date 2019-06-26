@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        #Box{
+            width: 100px;
+            height: 100px;
+            left: 0;
+            top: 0;
+            position: absolute;
+            background-color: blue;
+        }
+    </style>
+</head>
+<body>
+    <div id="Box"></div>
+    <script>
+        //拖拽的原理分析，执行down...move...up三个过程
+        //在down中你需要获取到的是鼠标down后的鼠标位置，以及鼠标位置距离左边框与上边框的位置
+        //在move中获取到鼠标的位置，然后减去鼠标位置距离左边框与上边框的位置，然后将值赋值给top与left
+        //拖拽事件取消
+
+        var box = document.getElementById('Box')
+        var body = document.getElementsByTagName('body')[0]
+
+        function bindEvent(demo ,wrapper){
+            var x ,y , boxL, boxT, disX, disY, drag = false
+            demo.onmousedown = function(e){
+                drag = true
+                //兼容性处理
+                var event = e || window.event
+                //获取到鼠标的位置
+                x = event.clientX
+                y = event.clientY
+                //内边框距离外边框左与上的距离
+                boxL = demo.offsetLeft
+                boxT = demo.offsetTop
+                //鼠标位置距离左边框与上边框的位置
+                disX = x - boxL
+                disY = y - boxT
+            }
+            wrapper.onmousemove = function(e){
+                var event = e || window.event
+                if(drag){
+                    demo.style.left = event.clientX - disX + 'px'
+                    demo.style.top = event.clientY - disY + 'px'
+                }
+            }
+            demo.onmouseup = function(){
+                drag = false
+            }
+        }
+
+        bindEvent(box,body)
+    </script>
+</body>
+</html>

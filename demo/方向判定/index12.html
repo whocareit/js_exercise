@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        div{
+            width: 200px;
+            height: 300px;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            margin-left: -100px;
+            margin-top: -150px;
+            background-color: red;
+        }
+    </style>
+</head>
+<body>
+    <div id="box"></div>
+    <script>
+        //该方法用于判定移入与移除的方向
+        //使用的是onmouseenter与onmouseleave
+        var oBox = document.getElementById('box')
+        function bindEvent(demo){
+            demo.onmouseenter = function(e){
+                console.log('in')
+                getDir(e)
+            }
+            demo.onmouseleave = function(e){
+                console.log('out')
+                getDir(e)
+            }
+
+            function getDir(e){
+                var event = e || window.event
+                var x,y
+                x = (event.clientX - demo.offsetLeft - demo.offsetWidth/2)*(demo.offsetLeft > demo.offsetWidth ? demo.offsetWidth/demo.offsetLeft : 1)
+                y = (event.clientY - demo.offsetTop - demo.offsetHeight/2)*(demo.offsetTop > demo.offsetHeight ? demo.offsetTop/demo.offsetHeight : 1)
+                var t = ( Math.round((Math.atan2(y,x)*(180/Math.PI)+180)/9) + 3) % 4
+                console.log(t)
+            }
+        }
+        bindEvent(oBox)
+    </script>
+</body>
+</html>

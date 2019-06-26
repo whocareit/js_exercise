@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        div {
+            width: 100px;
+            height: 100px;
+            background-color: red;
+            position: absolute;
+            left: 0;
+            opacity: 1;
+        }
+
+        .top {
+            top: 100px;
+        }
+
+        .bottom {
+            top: 300px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="top"></div>
+    <div class="bottom"></div>
+    <script>
+        //注意在命名的时候不要命名成系统变量如top,bottom等
+        var Top = document.getElementsByTagName('div')[0]
+        var Bottom = document.getElementsByTagName('div')[1]
+        var timer = null
+        //用对象来储存一个物体中的多个目标点
+        var attrObj = {
+            width: 400,
+            height: 400,
+            opacity: 50,
+            left: 300,
+            top: 200
+        }
+
+
+        Top.onclick = function () {
+            //在这个方法中传入一个回调函数，当里面的所有内容都执行完成之后，再去执行这个函数，就可以完成链式运动
+            startMove(this, attrObj,function(){
+                startMove(Bottom, attrObj)
+            })
+        }
+        //多物体多值链式运动框架
+
+        function getStyle(obj, attr) {
+            if (obj.currentStyle) {
+                return obj.currentStyle[attr]
+            } else {
+                return window.getComputedStyle(obj, false)[attr]
+            }
+        }
+
+
+        function startMove(obj,json,callback){
+            clearInterval(obj.timer)
+            var iSpeed,iCur
+            obj.timer = setInterval(function(){
+                //stop变量用来控制清除定时器
+                var bStop = true
+                //使用for in 语句来遍历整个的对象
+                for(var attr in json){
+                    if(attr == 'opacity'){
+                        iCur = parseFloat(getStyle(obj,attr))*100
+                    }else{
+                        iCur = parseInt(getStyle(obj,attr))
+                    }
+                    //使用json[attr]是为了获取到属性值
+                    iSpeed = (json[attr] - iCur) / 7
+                    iSpeed = iSpeed > 0 ? Math.ceil(iSpeed) : Math.floor(iSpeed)
+                    //此时的处理方法不能与之前相同，要等所有的内容执行完执行再来清除定时器
+                    if(attr == 'opacity'){
+                        obj.style.opacity = (iCur + iSpeed ) / 100
+                    }else{
+                        obj.style[attr] = iSpeed + iCur + 'px'
+                    }
+                    if(iCur != json[attr]){
+                        bStop = false
+                    }
+                }
+                if(bStop){
+                    clearInterval(obj.timer)
+                    typeof callback == 'function' ? callback() : ' '
+                }
+            },30)
+        }
+    </script>
+</body>
+
+</html>

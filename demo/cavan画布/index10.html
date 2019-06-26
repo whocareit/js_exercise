@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <!-- 设置画布大小 -->
+    <canvas id = 'can' height = '500px' width = '500px' ></canvas>
+    <div id = 'box'></div>
+    <script>
+        var can = document.getElementById('can')
+        var box = document.getElementById('box')
+        //getContext('2d')对象是内建的HTML5对象，拥有多种绘制路径、矩形、圆形、字符以及添加图像的方法
+        var ctx = can.getContext('2d')
+        CanvasRenderingContext2D.prototype.sector = function(x,y,r,sDeg,eDeg){
+            this.save() //保存画布
+            this.beginPath() //开始绘画
+            this.moveTo(x ,y) //从某个坐标开始
+            //角度转化为弧度值sDeg*Math.PI/180,eDeg*Math.PI/180,false表示从顺时针开始绘画
+            this.arc(x ,y ,r ,sDeg*Math.PI/180 ,eDeg*Math.PI/180 ,false)
+            this.closePath()//结合绘画
+            this.restore() //保存绘画完成后的画布
+            return this
+        }
+
+        ctx.fillStyle = 'red' //填充颜色
+        var angle = 0; 
+        var timer = setInterval(function(){ 
+            angle += 5;
+            //分别代表圆心，半径，角度的变化
+            ctx.sector(250,250,100,0,angle).fill()
+            var per = (5 * angle / 18).toFixed(2)
+            box.innerHTML = '加载中: ' + per + '%' 
+            if(angle == 360){
+                clearInterval(timer)
+                box.innerHTML = '加载完成'
+            }
+        },200)
+
+    </script>
+</body>
+</html>

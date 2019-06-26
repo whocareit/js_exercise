@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <div class="demo    item                  aaa">
+        <p class="bbb          demo">
+            <span class="ddd   ccc       demo"></span>
+        </p>
+        <li class="li"></li>
+    </div>
+    <script>
+        // 写一个方法，用于判断dom节点中的classname名称是否等于demo，如果有则返回该dom节点
+        //在明白此之前，需要去了解的就是slice的原理是怎样实现的
+        // Array.prototype.slice = function(a,b){
+        //     var args = []
+        //     for(var i = a; i < b; i++){
+        //         //使用this来指定传入的数组
+        //         args.push(this[i])
+        //     }
+        //     return args
+        // }
+
+        //在document上封装一个getclssDom方法，来获取含有某个classname的dom节点有哪些
+        Document.prototype.getClssDom = function(className){
+            //在类数组中没有slice()方法，因此通过下面的这种方式去截取类数组中的dom
+            var resAllDom = Array.prototype.slice.call(document.getElementsByTagName('*'),0)
+            var fittlerArr = []
+
+            //将每个dom中的classname进行规格化，将其处理成前后没有空格，每个classname名称之间只有一个空格的形式
+            function dealDom(dom){
+                //在此处使用的是正则表达式的形式，将字符换替换成字符串加上一个空格
+                var reg = /\s + /g
+                //trim()方法是去除字符串中的前后之间的空格
+                var resArr = dom.className.replace(reg,' ').trim()
+                return resArr
+            }
+
+            //使用forEach方法对每一个dom中是否有className进行筛选,在forEach中有ele和index属性
+            //前者表示的是数组中的元素，后者表示的则是数组中的index
+            resAllDom.forEach(function(ele,index){
+                //将处理好的数组进行规则话，中间用一个空格隔开
+                var itemsClaasArr = dealDom(ele).split(' ')
+                //用for循环遍历每个dom，最后返回结果
+               for(var i = 0 ; i < itemsClaasArr.length; i++){
+                  if(itemsClaasArr[i] == className){
+                    fittlerArr.push(ele)
+                    //为了提高性能，如果找到了demo就可以不管后面的classname名称是什么，直接返回结果就行,就使用break跳出判断
+                    break
+                  }
+               }
+            })
+            return fittlerArr
+        }
+        console.log(document.getClssDom('demo'))
+    </script>
+</body>
+</html>

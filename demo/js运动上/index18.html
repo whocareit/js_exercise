@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        /* 设置left: -400px,使得其边框相对于浏览器的右边窗口 */
+        /* .wrapper{
+            width: 400px;
+            height: 80px;
+            background-color: yellow;
+            position: absolute;
+            left: -400px;
+            top: 300px;
+        }
+        /* 此时的相对定位设置为right: -50px,使得.box刚刚挨着.wrapper的边界 */
+        /* .wrapper .box{
+            width: 50px;
+            height: 80px;
+            position: absolute;
+            background-color: orange;
+            top: 0;
+            right: -50px;
+        } */
+
+        /* .show{
+            width: 400px;
+            height: 400px;
+            opacity: 1;
+            margin: 100px;
+            background-color: red;
+        } */
+
+        div {
+            width: 100px;
+            height: 100px;
+            background-color: red;
+            margin-bottom: 50px;
+            opacity: 1;
+            border: 1px solid yellow;
+        }
+    </style>
+</head>
+
+<body>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <!--此层级结构用于透明度的变化 
+        <div class="show"></div> -->
+
+    <!-- 此目录结构用于实现隐藏图标显示
+        <div class="wrapper">
+        <div class="box"></div>
+    </div> -->
+
+
+    <script>
+        //多个物体之间不同睡属性之间的变化
+        var divArray = document.getElementsByTagName('div')
+        var timer = null
+        divArray[0].onclick = function () {
+            startMove(this, 400, 'width')
+        }
+        divArray[1].onclick = function () {
+            startMove(this, 400, 'height')
+        }
+        divArray[2].onclick = function () {
+            startMove(this, 50, 'opacity')
+        }
+        divArray[3].onclick = function () {
+            startMove(this, 50, 'borderWidth')
+        }
+
+        console.log(parseFloat(getStyle(divArray[0],'opacity')))
+        function getStyle(obj, attr) {
+            if(obj.currentStyle){
+                return obj.currentStyle[attr]
+            }else{
+                return window.getComputedStyle(obj,false)[attr]
+            }
+        }
+
+        function startMove(obj, target, attr) {
+            clearInterval(obj.timer)
+            var iSpeed, iCurry
+            obj.timer = setInterval(function(){
+                //opacity的值在0~1之间，其余的大于0且都为整数，因此在取整时的方式是不一样的
+                if(attr == 'opacity'){
+                    iCurry = parseFloat(getStyle(obj,'opacity'))*100
+                }else{
+                    iCurry = parseInt(getStyle(obj,attr))
+                }
+                iSpeed = (target - iCurry) / 7
+                iSpeed = iSpeed > 0? Math.ceil(iSpeed) : Math.floor(iSpeed)
+                if(iCurry == target){
+                    clearInterval(timer)
+                }else{
+                    if(attr == 'opacity'){
+                        obj.style.opacity = (iSpeed + iCurry) / 100
+                    }else{
+                        //此时因为attr为字符串形式，因此在这里需要用obj.style[attr]而不是obj.style.attr形式
+                        obj.style[attr] = iSpeed + iCurry + 'px'
+                    }
+                }
+            },30)
+        }
+
+
+
+
+        // //多个物体之间的样式快速变化
+        // var divArr = document.getElementsByTagName('div')
+        // var timer = null
+        // console.log(divArr)
+        // for(var i = 0; i < divArr.length; i++){
+        //     divArr[i].onmouseenter = function(){
+        //         startMove(this,400)
+        //     }
+        //     divArr[i].onmouseleave = function(){
+        //         startMove(this,100)
+        //     }
+        // }
+        // function startMove(obj,target){
+        //     //在这时定时器会产生一个问题，因为这里清除的是全局的定时器，当你快速的从一个物体到另外一个物体时
+        //     //上一次的定时器也会被清除，因此这样的处理方式是不正确的,清除的应该是当前对象的定时器，因此就得使用下面的这种形式
+        //     clearInterval(obj.timer)
+        //     var iSpeed
+        //     obj.timer = setInterval(function(){
+        //         iSpeed = (target - obj.offsetWidth) / 7
+        //         iSpeed = iSpeed > 0 ? Math.ceil(iSpeed) : Math.floor(iSpeed)
+        //         if(obj.offsetWidth === target){
+        //             clearInterval(timer)
+        //         }else{
+        //             obj.style.width = iSpeed + obj.offsetWidth + 'px'
+        //         }
+        //     },30)
+        // } 
+
+
+
+        //获取Dom节点中的属性的方法,通过此方法获取到的是字符串形式的值
+        // var show = document.getElementsByClassName('show')[0]
+        // var timer = null
+        // function getStyle(obj, attr){
+        //     if(obj.currentStyle){
+        //         return obj.currentStyle[attr]
+        //     }else{
+        //         return window.getComputedStyle(obj,false)[attr]
+        //     }
+        // }
+
+        // show.onclick = function() {
+        //    startMove(this,50)
+        // }
+        // function startMove(obj,target){
+        //     clearInterval(timer)
+        //     var iSpeed,iCurry
+        //     timer = setInterval(function(){
+        //         //如果使用的属性是opacity,其值的范围是在0~1之间，如果使用之前的方法就不会看到效果
+        //         //因此在这里将其扩大一百倍来实现这个变化的过程，因此在这里设置了iCurry
+        //         iCurry = parseFloat(getStyle(obj,'opacity'))*100
+        //         //注意在最初传递参数的时候的target也需要去扩大一百倍
+        //         iSpeed = (target - iCurry)/7
+        //         iSpeed = iSpeed > 0 ? Math.ceil(iSpeed) : Math.floor(iSpeed)
+        //         if(iSpeed == iCurry){
+        //             clearInterval(timer)
+        //         }else{
+        //             obj.style.opacity = (iCurry + iSpeed) / 100 
+        //         }
+        //     },30)
+        // }
+
+
+
+        // var wrapper = document.getElementsByClassName('wrapper')[0]
+        // //在上面的样式布局中，不能直接的触碰到wrapper，这个时候可以使用冒泡事件，在这里使用onmouseenter事件来触发
+        // var timer = null
+        // wrapper.onmouseenter = function(){
+        //     startMove(this, 0)   
+        // }
+        // wrapper.onmouseleave = function(){
+        //     startMove(this, -400)
+        // }
+
+        // //在这里设置了target用于表示目标点
+        // function startMove(dom, target){
+        //     clearInterval(timer)
+        //     var iSpeed;
+        //     timer = setInterval(function(){
+        //         iSpeed = (target - dom.offsetLeft)/7
+        //         iSpeed = iSpeed > 0 ? Math.ceil(iSpeed) : Math.floor(iSpeed)
+        //         if(dom.offsetLeft === target){
+        //             clearInterval(timer)
+        //         }else{
+        //             dom.style.left = dom.offsetLeft + iSpeed + 'px'
+        //         }
+        //     },30)
+        // }
+    </script>
+</body>
+
+</html>

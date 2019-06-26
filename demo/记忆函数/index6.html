@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        //运用递归思想实现阶乘的运算
+        // var count  = 0
+        // function factorial(n){
+        //     count++//用于记录函数执行的次数
+        //     if(n == 0 || n == 1){
+        //          return 1;
+        //     }
+        //     return n * factorial (n-1)
+        // }
+        
+        // for(var i = 1; i <= 5; i++){
+        //     console.log(factorial(i))
+        // }
+        // console.log(count)
+        //在没有使用函数记忆时，上面的函数执行的次数为15次，下面就是使用了函数记忆之后的阶乘运算
+
+
+
+        // var count = 0;
+        // var cache = [];
+        // function factorial(n){
+        //     count++
+        //     if(cache[n]){
+        //         return cache[n]
+        //     }else{
+        //         if(n == 1 || n == 0){
+        //             cache[0] = 1
+        //             cache[1] = 1
+        //             return 1
+        //         }else{
+        //             cache[n] = n * factorial(n - 1)
+        //             return cache[n]
+        //         }
+        //     }
+        // }
+
+        // for(var i = 1; i <= 5; i++){
+        //     console.log(factorial(i))
+        // }
+
+
+
+        // console.log(count)
+        // 上面的这种方式是直接在函数中使用函数记忆的过程，那么接下来就是封装一个记忆函数
+        function memorize(fn){
+            var cache = []
+            return function (){
+                //使用唯一标识来对缓存的数据做标记
+                var key = arguments.length + Array.prototype.join.call(arguments)
+                if(cache[key]){
+                    return cache[key]
+                }else{
+                    cache[key] = fn.apply(this,arguments)
+                    return cache[key]
+                }
+            }
+        }
+
+        //memorize方法采用了闭包的思想来封装一个记忆函数
+        function factorial(n){
+            if(n == 0 || n == 1){
+                 return 1;
+            }
+            return n * factorial (n-1)
+        }
+
+        var newF = memorize(factorial)
+
+        console.time('no M')
+        console.log(memorize(5))
+        console.timeEnd('no M')
+
+        console.time('fir M')
+        console.log(newF(5))
+        console.timeEnd('fir M')
+
+        console.time('A M')
+        console.log(newF(5))
+        console.timeEnd('A M')
+
+    </script>
+</body>
+</html>

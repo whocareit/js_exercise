@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        .wrapper{
+            width: 100px;
+            height: 100px;
+            position: absolute;
+            top: 0;
+            left: 0;
+            background-color: red;
+        }
+        button{
+            position: absolute;
+            margin-top: 150px;
+            width: 40px;
+            height: 20px;
+        }
+    </style>
+</head>
+<body>
+    <!--匀速运动与变速运动时页面布局
+    <div class="wrapper"></div>
+    <button>run</button> -->
+    <script>
+        // js运动实现一个物体的匀速，加速运动的变化，实现一个物体的单属性变化与多个物体的单属性变化，一个物体的多属性
+        //变化，链式的多属性变化
+
+        //一个物体的匀速运动过程
+        // var wrapper = document.getElementsByClassName('wrapper')[0]
+        // var but = document.getElementsByTagName('button')[0]
+        // //这里要将timer设置为全局变量，如果是局部变量则不能在bindMove()方法中最初清除掉这个定时器
+        // var timer = null
+
+        // but.onclick = function() {
+        //     bindMove(wrapper)
+        // }
+        // function bindMove(obj){
+        //     //在这个过程中还涉及到一个问题，当连续点击按钮时，会多次的调用下面的这个方法，物体的运动速度会加快因此可以在最初清除定时器
+        //     clearInterval(timer)
+        //     var iSpeed
+        //     //通过与临界值的判定来设定速度
+        //     if(iSpeed > 300){
+        //         iSpeed = -8
+        //     }else{
+        //         iSpeed = 8
+        //     }
+        //     timer = setInterval(function(){
+        //         iSpeed = 8
+        //         //使用if判定此时的300不是iSpeed的整数倍，所以要想达到预想的效果就可以使用下面这种预处理的方法
+        //         //当采用obj.offsetLeft >= 300时，如果要使得一个方法能够从左往右或者从右往左运动时
+        //         //显然obj.offsetLeft >= 300的方式是不行的，因为在这个过程会涉及到比较符号的改变，因此采用下面的这种方式
+        //         //从左往右运动的过程中，还会涉及到下面这种方式的取值为负问题，因为这里去取绝对值
+        //         if(Math.abs(300 - obj.offsetLeft) < Math.abs(iSpeed)){
+        //             clearInterval(timer)
+        //             obj.style.left = 300 + 'px'
+        //         }else{
+        //             obj.style.left = obj.offsetLeft + iSpeed + 'px'
+        //         }
+        //     },30)
+        // }
+        //先加速后减速运动实现
+        
+        // function bindMove(obj){
+        //     clearInterval(timer)
+        //     //iCurry用于表示速度的变化
+        //     var iSpeed
+        //     timer = setInterval(function(){
+        //         iSpeed = (300 - obj.offsetLeft) / 7
+        //         //如果仅仅采用上面的方式，会使得最后的left值永远都是299.  ,因为上面的计算不会得到整数
+        //         //并且offsetLeft会自动对数据进行取整，因为为了避免上面的这种情况产生,采用想向上取整与向下取整的方式来进行
+        //         iSpeed = iSpeed > 0 ? Math.ceil(iSpeed) : Math.floor(iSpeed)
+        //         if(obj.offsetLeft === 300){
+        //             clearInterval(timer)
+        //         }else{
+        //             obj.style.left = obj.offsetLeft + iSpeed + 'px'
+        //         }
+        //     },30)
+        // }
+    </script>
+</body>
+</html>

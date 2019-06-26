@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        div{
+            width: 100px;
+            height: 100px;
+        }
+        #box1{
+            background-color: red;
+            position: absolute;
+            left: 0;
+            top: 0;
+            z-index: 10;
+        }
+        #box2{
+            background-color: #000;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            margin-left: -50px;
+            margin-top: -50px; 
+        }
+    </style>
+</head>
+<body>
+    <div id="box1"></div>
+    <div id="box2"></div>
+    <script>
+        var box1 = document.getElementById('box1')
+        var box2 = document.getElementById('box2')
+        var body = document.getElementsByTagName('body')[0]
+        //封装的用于来判断覆盖面积函数，该函数需要你去传递三个参数，第一个是需要移动的方块，第二个是移动的wrapper，第三是固定的方块
+        function bindEvent(demo,wrapper,demo1){
+            var X ,Y ,boxL ,boxT ,disX ,dixY ,flag = false
+            demo.onmousedown = function(e){
+                flag = true
+                var event = e || window.event
+                //获取鼠标的位置
+                X = event.clientX
+                Y = event.clientY
+                //获取demo左右边框的位置
+                boxL = demo.offsetLeft
+                boxT = demo.offsetTop
+                disX = X - boxL
+                disY = Y - boxT
+            }
+            wrapper.onmousemove = function(e){
+                var width,coverWidth = 0,heigth,coverHeight = 0
+                width = demo.offsetWidth
+                height = demo.offsetHeight
+                var event = e || window.event
+                if(flag){
+                    //拖拽过程的移动公式
+                    demo.style.left = event.clientX - disX + 'px'
+                    demo.style.top = event.clientY - disY + 'px'
+                    //算覆盖面积
+                    //算覆盖宽度从右向左分为两种情况，当覆盖面积中的长度逐渐增大时与覆盖面积逐渐减小时两种情况进行计算
+                    if((demo1.offsetLeft < boxL + width)&&(demo1.offsetLeft > boxL)){
+                        coverWidth =  boxL + width - demo1.offsetLeft
+                    }else if((boxL + width > (demo1.offsetLeft + demo1.offsetWidth)) && (boxL < demo1.offsetLeft + demo1.offsetWidth)){
+                        coverWidth = demo1.offsetLeft + demo1.offsetWidth - boxL
+                    }
+                    //算覆盖高度从右向左分为两种情况，当覆盖面积中的长度逐渐增大时与覆盖面积逐渐减小时两种情况进行计算
+                    if((demo1.offsetTop > boxT) && (demo1.offsetTop < boxT + height)){
+                        coverHeight = boxT + height - demo1.offsetTop
+                    }else if((boxT + height > (demo1.offsetTop + demo1.offsetHeight)) && (boxT < demo1.offsetTop + demo1.offsetHeight)){
+                        coverHeight = demo1.offsetTop + demo1.offsetHeight - boxT
+                    }    
+                }
+            }
+
+            demo.onmouseup = function(){
+                flag = false
+            }
+        }
+        bindEvent(box1,body,box2)
+    </script>
+</body>
+</html>

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <div id = 'oDiv'>0</div>
+    <button id = 'oBut'>click</button>
+    <script>
+        //采用节流的方式来防止恶意的点击
+        var oDiv = document.getElementById('oDiv')
+        var oBut = document.getElementById('oBut')
+
+        //节流方式，使用函数来封装，向里面去传递参数
+        function throttle(handler ,wait){
+            var initTime = 0
+            return function(e){
+                //arguments代表的是事件对象,在这里使用this来改变指向
+                var nowTime = new Date().getTime()
+                if(nowTime - initTime > wait){
+                    handler.apply(this,arguments)
+                    initTime = nowTime
+                }
+            }
+        }
+        function buy(e){
+            console.log(this,e)
+            return  oDiv.innerText = parseInt(oDiv.innerText) + 1;
+        }
+
+        oBut.onclick = throttle(buy,1000)
+
+
+    </script>
+</body>
+</html>

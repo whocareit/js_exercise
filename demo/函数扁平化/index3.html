@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        //数组扁平化，将多维的数组转化为一维的数组的过程
+
+        //第一种实现数组扁平化的过程，使用for循环来实现整个扁平化的过程
+        function isArray(obj){
+            return Object.prototype.toString.call(obj) == '[object Array]'
+        }
+
+        function flatten(arr){
+            var arr = arr || []
+            var resArr = []
+            var t = arr.length
+            for(var i = 0; i < t; i++){
+                if(isArray(arr[i])){
+                    resArr = resArr.concat(flatten(arr[i]))
+                }else{
+                    resArr.push(arr[i])
+                }
+            }
+            return resArr
+        }
+
+        //第二种实现数组扁平化的过程，使用数组中的forEach方法，在其中还需要去实现方法不可见
+        Array.prototype.flatten = function(){
+            var resArr = []
+            this.forEach(function(item){
+                Object.prototype.toString.call(item) == '[object Array]'? resArr = resArr.concat(item.flatten()): resArr.push(item)
+            })
+            return resArr
+        }
+
+        //第三种实现数组扁平化的过程，使用数组中的reduce方法
+        function flatten1(arr){
+            var arr = arr || []
+            return arr.reduce(function(prev,next){
+                return Object.prototype.toString.call(next) == '[object Array]'? prev.concat(flattne1(next)) : prev.concat(next)
+            },[])
+        }
+
+    </script>
+</body>
+</html>

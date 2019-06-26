@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>随机数的运用</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        .wrapper{
+            width: 400px;
+            height: 500px;
+            border: 2px solid black;
+            position: absolute;
+            top: 100px;
+            left: 50%;
+            margin-left: -200px;
+            position: relative;
+            overflow: hidden;
+        }
+        .que{
+            width: 30px;
+            height: 30px;
+            background-color: red;
+            position: absolute;
+        }
+    </style>
+</head>
+<body>
+    <div class="wrapper"></div>
+    <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.8.0.js"></script>
+    <script>
+        // 在setInterval中加上Math.random()来随机的生成小方块
+        setInterval(function(){
+            // 生成小方块
+           var oBox = $('<div class = "que"></div>') 
+        // 将小方块的初始位置放在边框的外部，并且让其整个的整体都能在大框的内部
+        // angle使用了css3中的transfrom属性，用来写方块的角度
+        var agle = parseInt(Math.random()*40) - 20
+           oBox.css({
+               'top': -parseInt(Math.random()*80) + 'px',
+               'left': parseInt(Math.random()*370) + 'px',
+               'z-index': 10,
+               'transform': 'rotate('+ agle +' deg)'
+           }).appendTo($('.wrapper'))//appendTo表示将<div class = "que"></div>插入到wrapper内部
+           down(oBox);
+        },Math.random()*200 + 200 )
+        //在min到max之间产生随机数
+        function down(item){
+            //使用css3中的动画来实现这个效果
+            item.animate({top: '530px' },4000,function(){
+                if(parseInt(item.css('top')) > 480){
+                    //将方块去移除掉
+                    $(this).remove()
+                }
+            })
+        }
+        function getRan(max,min){
+            return Math.random()(max - min) + min
+        }
+    </script>
+</body>
+</html>
