@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        div {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100px;
+            height: 100px;
+            background-color: red;
+            border-radius: 50%;
+        }
+    </style>
+</head>
+
+<body>
+    <div></div>
+    <script>
+        //重力场运动，以及四边碰撞
+        var oDiv = document.getElementsByTagName('div')[0]
+        var timer = null
+        //为了使拖拽的小球获取到最后的速度
+        var lastX = oDiv.offsetLeft
+        var lastY = oDiv.offsetTop
+
+        oDiv.onmousedown = function(e){
+            //如果没有清除这个定时器，则当小球在运动的时候，就不能去抓住小球
+            clearInterval(this.timer)
+            var event = e || widow.event
+            var disX = event.clientX - this.offsetLeft
+            var disY = event.clientY - this.offsetTop
+            var _that = this
+            var iSpeedX
+            var iSpeedY
+
+            document.onmousemove = function (e){
+                var event = e || window.event
+                var newLeft
+                var newTop
+                newLeft = event.clientX - disX
+                newTop = event.clientY - disY
+                //此时获取速度是用最末状态的offsetLeft与offsetTop减去之前状态的offsetLeft与offsetTop
+                iSpeedX = newLeft - lastX
+                iSpeedY = newTop - lastY
+                //将之前状态的值赋值给之后的状态
+                lastX = newLeft
+                lastY = newTop
+
+                _that.style.left = newLeft + 'px'
+                _that.style.top = newTop + 'px'
+            }
+
+            document.onmouseup= function(){
+                document.onmouseup = null
+                document.onmousemove = null
+                //当拖拽事件完成之后再来执行重力场速度问题
+                startMove(_that,iSpeedX,iSpeedY)
+            }
+        }
+
+        // oDiv.onclick = function () {
+        //     startMove(this)
+        // }
+        function startMove(obj,iSpeedX,iSpeedY) {
+            clearInterval(obj.timer)
+            //此时需要设置两个速度，一个是横向速度，另外一个是纵向速度
+            var g = 6
+            var u = 0.8
+            obj.timer = setInterval(function () {
+                //此时来改变纵向速度的变化，以此来改变重力场的变化,在这时的速度是没有任何损失的
+                iSpeedY += g
+                var newLeft = obj.offsetLeft + iSpeedX
+                var newTop = obj.offsetTop + iSpeedY
+                //当球触碰到边界后，纵向的速度方向会改变,document.documentElement.clientWidth表示浏览器满屏的高度
+                //在这个时候会产生一个问题，当小球接近下边界的时候，会产生滚动条，这个时候为了解决这个问题，应该在小球
+                //要接近边界的时候直接设置小球距浏览器窗口的高度
+                if (newTop >= document.documentElement.clientHeight - obj.offsetHeight) {
+                    iSpeedY *= -1
+                    //此时当纵向的速度变为0时，横向的速度并没有改变,因此需要将横向的速度也做改变
+                    iSpeedY *= u
+                    iSpeedX *= u
+                    newTop = document.documentElement.clientHeight - obj.offsetHeight
+                }
+                if (newTop <= 0) {
+                    iSpeedY *= -1
+                    iSpeedY *= u
+                    iSpeedX *= u
+                    newTop = 0
+                }
+                if (newLeft >= document.documentElement.clientWidth - obj.offsetWidth) {
+                    iSpeedX *= -1
+                    iSpeedY *= u
+                    iSpeedX *= u
+                    newLeft = document.documentElement.clientWidth - obj.offsetWidth
+                }
+                if (newLeft <= 0) {
+                    iSpeedY *= u
+                    iSpeedX *= u
+                    iSpeedX *= -1
+                    newLeft = 0
+                }
+
+                //在这时，当小球停止后，应该去清除掉计时器，这里有一个问题，就是怎样来断定小球的最终状态
+                if(Math.abs(iSpeedX) < 1){
+                    iSpeedX = 0
+                }
+                if(Math.abs(iSpeedY) < 1){
+                    iSpeedY = 0
+                }
+                if(iSpeedX == 0 && iSpeedY == 0 && newTop == document.documentElement.clientWidth - obj.offsetWidth ){
+                    clearInterval(obj.timer)
+                }
+
+                obj.style.left = newLeft + 'px'
+                obj.style.top = newTop + 'px'
+            }, 30)
+        }
+    </script>
+</body>
+
+</html>

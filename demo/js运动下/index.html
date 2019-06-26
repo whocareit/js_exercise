@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        /* div{
+            width: 100px;
+            height: 100px;
+            background-color: red;
+            position: absolute;
+            left: 0;
+            top: 0;
+            border-radius: 50%;
+        }
+        span{
+            position: absolute;
+            width: 1px;
+            height: 150px;
+            background: #ccc;
+            left: 400px;
+            top: 0;
+        } */
+
+        ul,li{
+            list-style: none;
+        }
+        ul{
+            width: 600px;
+            height: 60px;
+            border: 1px solid black;
+            margin: 100px auto;
+            position: relative;
+        }
+        ul .nav{
+            width: 148px;
+            height: 58px;
+            border: 1px solid black;
+            float: left;
+            line-height: 58px;
+            text-align: center;
+        }
+        ul .bg{
+            width: 150px;
+            height: 60px;
+            position: absolute;
+            left: 0;
+            top: 0;
+            background-color: orange;
+            opacity: 0.3;
+        }
+    </style>
+</head>
+<body>
+    <!--此层级结构用于反应加速度与速度之间的变换关系 
+    <div></div>
+    <span></span> -->
+
+    <ul>
+        <li class = 'nav'>react</li>
+        <li class = 'nav'>webpack</li>
+        <li class = 'nav'>node</li>
+        <li class = 'nav'>redux</li>
+        <li class = 'bg'></li>
+    </ul>
+    <script>
+        // //匀加速运动实现方法
+        // var oDiv = document.getElementsByTagName('div')[0]
+        // var timer = null
+        // oDiv.onclick = function(){
+        //     startMove(this)
+        // }
+
+        //导航栏背景移动方法，首先通过数组中的slice方法来获取到class为nav的节点,然后再使用数组中的forEach方法来循环
+        var oDivArray = Array.prototype.slice.call(document.getElementsByClassName('nav'),0)
+        var oBg = document.getElementsByClassName('bg')[0]
+            oDivArray.forEach(function(ele,index){
+                ele.onmouseenter = function (){
+                    //此时的startMove()的第二个参数应该是当前节点的offsetLeft属性值
+                    var newLeft = this.offsetLeft
+                    startMove(oBg,newLeft)
+                }
+            })
+
+        //实现固定挡板加速度与速度之间的变化关系
+        function startMove(obj,target){
+            clearInterval(obj.timer)
+            //使用物理上的v = v + at来解决
+            //此时的u用一个小数的形式来表示速度受损的情况
+            var iSpeed,a,u
+            iSpeed = 20,u = 0.8
+            obj.timer = setInterval(function(){
+                //使用 iSpeed = iSpeed + a和iSpeed = iSpeed - a形式实现的是理论状态中的无损失速度的方式，也不能
+                //反应出a随时的变化，因此在下面的这种形式实现的就是加速度改变的运动方式,此时a分正负，因此不需要使用 iSpeed = iSpeed - a
+                //接下来需要实现的就是速度受损的情况
+                a = (target - obj.offsetLeft) / 10
+                    iSpeed = iSpeed + a
+                    iSpeed = iSpeed*u
+                    //在这里需要去判定物体最后的停止状态，即速度等于零并且离板的距离为零
+                if(Math.abs(iSpeed) < 1 && Math.abs(target - obj.offsetLeft < 1)){
+                    console.log('over')
+                    obj.style.left = target+ 'px'
+                    clearInterval(obj.timer)
+                }else{
+                    obj.style.left = obj.offsetLeft + iSpeed + 'px'
+                }
+            },30)
+        }
+
+
+
+        //此时实现的是加速运动
+        // function startMove(obj){
+        //     clearInterval(obj.timer)
+        //     //使用物理上的v = v + at来解决
+        //     var iSpeed,a
+        //     a = 3
+        //     iSpeed = 20
+        //     obj.timer = setInterval(function(){
+        //         iSpeed = iSpeed + a
+        //         obj.style.left = obj.offsetLeft + iSpeed + 'px'
+        //     },30)
+        // }
+    </script>
+</body>
+</html>
