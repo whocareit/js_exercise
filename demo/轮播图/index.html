@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        .wrapper {
+            width: 400px;
+            height: 250px;
+            margin: 150px auto 0px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .slidePage {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 2000px;
+            height: 250px;
+        }
+
+        .slidePage li {
+            width: 400px;
+            height: 250px;
+            float: left;
+        }
+
+        .slidePage li img {
+            width: 100%;
+            height: 100%;
+        }
+
+        .btn {
+            width: 40px;
+            height: 40px;
+            color: #fff;
+            background-color: #000;
+            position: absolute;
+            top: 50%;
+            margin-top: -20px;
+            text-align: center;
+            font-size: 18px;
+            line-height: 40px;
+            opacity: 0.3;
+            cursor: pointer;
+        }
+
+        .wrapper:hover .btn {
+            opacity: 1;
+        }
+
+        .btnLeft {
+            left: 15px;
+        }
+
+        .btnRight {
+            right: 15px;
+        }
+
+        .wrapper .sliderIndex {
+            width: 100%;
+            position: absolute;
+            bottom: 15px;
+            text-align: center;
+        }
+
+        .wrapper .sliderIndex span {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            margin-right: 10px;
+            background-color: #ccc;
+        }
+
+        .wrapper .sliderIndex .active {
+            background-color: #f40;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="wrapper">
+        <ul class="slidePage">
+            <li>
+                <img src="./t1.jpg">
+            </li>
+            <li>
+                <img src="./t2.jpg">
+            </li>
+            <li>
+                <img src="./t3.jpg">
+            </li>
+            <li>
+                <img src="./t4.jpg">
+            </li>
+            <li>
+                <img src="./t1.jpg">
+            </li>
+        </ul>
+        <div class="btn btnLeft">&lt;</div>
+        <div class="btn btnRight">&gt;</div>
+        <div class="sliderIndex">
+            <span class='active'></span>
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </div>
+    <script>
+        //无缝轮播
+        var slidePage = document.getElementsByClassName('slidePage')[0]
+        var moveWidth = slidePage.children[0].offsetWidth
+        //用于计算轮播图中图片的长度
+        var num = slidePage.children.length - 1
+        var leftBtn = document.getElementsByClassName('btnLeft')[0]
+        var rightBtn = document.getElementsByClassName('btnRight')[0]
+        var oSpanArray = document.getElementsByClassName('sliderIndex')[0].getElementsByTagName('span')
+        var index = 0
+        var timeOut = null
+        var lock = true
+
+        leftBtn.onclick = function () {
+            autoMove('right->left')
+        }
+        rightBtn.onclick = function () {
+            autoMove('left->right')
+        }
+
+        //根据小圓點來点击切换图片
+        for (var i = 0; i < oSpanArray.length; i++) {
+            (function (myIndex) {
+                oSpanArray[i].onclick = function () {
+                    lock = false;
+                    clearTimeout(timeOut)
+                    index = myIndex
+                    startMove(slidePage, { left: -index * moveWidth },function(){
+                        lock = true
+                        timeOut = setTimeout(autoMove,1500)
+                        changeIndex(index)
+                    })
+                }
+            })(i)
+        }
+
+        //direction 
+        //默认的轮播方向是'left->right',点击right按钮时的方向也是'left->right'
+        //点击left按钮的方向'right->left'
+        function autoMove(direction) {
+            //清除定时器
+            clearTimeout(timeOut)
+            if (lock) {
+                //在这里使用锁的目的是，防止连续点击后造成的轮播移动过程没有完全移入到边界处，而产生的bug
+                lock = false
+                if (!direction || direction == 'left->right') {
+                    index++
+                    startMove(slidePage, { left: slidePage.offsetLeft - moveWidth }, function () {
+                        //当在最后一张图片的时候要将ul中的left设置为0
+                        if (slidePage.offsetLeft == -num * moveWidth) {
+                            slidePage.style.left = '0px'
+                            index = 0
+                        }
+                        timeOut = setTimeout(autoMove, 1500)
+                        lock = true
+                        changeIndex(index)
+                    })
+                } else if (direction == 'right->left') {
+                    if (slidePage.offsetLeft == 0) {
+                        slidePage.style.left = -num * moveWidth + 'px'
+                        index = num
+                    }
+                    index--
+                    startMove(slidePage, { left: slidePage.offsetLeft + moveWidth }, function () {
+                        timeOut = setTimeout(autoMove, 1500)
+                        lock = true
+                        changeIndex(index)
+                    })
+                }
+
+            }
+        }
+        //在这里使用延时器是因为在autoMove中，使用了递归的方式在不断的调用这个延时器
+        timeOut = setTimeout(autoMove, 1500)
+
+        //改变小圆点的样式
+        function changeIndex(_index) {
+            for (var i = 0; i < oSpanArray.length; i++) {
+                oSpanArray[i].className = ' '
+            }
+            oSpanArray[_index].className = 'active'
+        }
+        //多物体链式运动方法封装
+        var timer = null
+        function getStyle(obj, attr) {
+            if (obj.currentStyle) {
+                return obj.currentStyle[attr]
+            } else {
+                return window.getComputedStyle(obj, false)[attr]
+            }
+        }
+
+
+        function startMove(obj, json, callback) {
+            clearInterval(obj.timer)
+            var iSpeed, iCur
+            obj.timer = setInterval(function () {
+                //stop变量用来控制清除定时器
+                var bStop = true
+                //使用for in 语句来遍历整个的对象
+                for (var attr in json) {
+                    if (attr == 'opacity') {
+                        iCur = parseFloat(getStyle(obj, attr)) * 100
+                    } else {
+                        iCur = parseInt(getStyle(obj, attr))
+                    }
+                    //使用json[attr]是为了获取到属性值
+                    iSpeed = (json[attr] - iCur) / 7
+                    iSpeed = iSpeed > 0 ? Math.ceil(iSpeed) : Math.floor(iSpeed)
+                    //此时的处理方法不能与之前相同，要等所有的内容执行完执行再来清除定时器
+                    if (attr == 'opacity') {
+                        obj.style.opacity = (iCur + iSpeed) / 100
+                    } else {
+                        obj.style[attr] = iSpeed + iCur + 'px'
+                    }
+                    if (iCur != json[attr]) {
+                        bStop = false
+                    }
+                }
+                if (bStop) {
+                    clearInterval(obj.timer)
+                    typeof callback == 'function' ? callback() : ' '
+                }
+            }, 30)
+        }
+    </script>
+</body>
+
+</html>
