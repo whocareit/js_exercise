@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // var array = [
+        //     { name: 'dahua1', age: 15, sex: 'g', hobby: 'basketball' },
+        //     { name: 'nihao', age: 20, sex: 'b', hobby: 'football' },
+        //     { name: 'luct', age: 34, sex: 'b', hobby: 'basketball' },
+        //     { name: 'dahua1', age: 15, sex: 'g', hobby: 'basketball' }
+        // ]
+        //数组中的方法及其原理运用
+
+        //forEach方法，在其内部使用function去调用即可，在函数中有三个参数，第一个参数表示数组中的第一项，第二个参数
+        //表示数组中的index，第三项表示的数组本身。
+
+        //直接调用系统封装好的forEach方法,循环遍历数组中的元素
+        // array.forEach(function(ele,index){
+        //     console.log(ele)
+        // })
+
+        //forEach原理
+        // Array.prototype.myForEach = function(fn){
+        //     for(var i = 0; i < this.length; i++){
+        //         fn(this[i],i)
+        //     }
+        // }
+        // //自己封装好的forEach方法
+        // array.myForEach(function(ele,index){
+        //     console.log(ele)
+        // })    
+
+        //注意在使用forEach的过程中并不支持break，这时使用for循环去跳出循环更加的合适
+
+        //filter的原理及其适用,filter方法，返回的数组元素是调用的数组的一个子集，传递的参数是用来进行逻辑判定的:该函数返回的true或false
+        //filter原理
+        // Array.prototype.myFilter = function(fn){
+        //     //用于接收结果为true的数组
+        //     var arr = []
+        //     for(var i = 0 ; i < this.length; i++){
+        //         if(fn(this[i],i)){
+        //             arr.push(this[i])
+        //         }
+        //     }
+        //     return arr
+        // }
+
+        // var newArr = array.filter(function(ele,index){
+        //    if( ele.sex == 'g'){
+        //        return true
+        //    }else{
+        //        return false
+        //    }
+        // })
+
+        // var newArr = array.myFilter(function(ele,index){
+        //    if( ele.sex == 'g'){
+        //        return true
+        //    }else{
+        //        return false
+        //    }
+        // })
+        // console.log(newArr)
+
+        //map()方法将调用的数组的每个元素传递给指定的函数，并返回一个数组
+
+        //map方法原理
+        // function deepClone(target, option) {
+        //     //首先判断克隆额内容是否为空，如果不是空就执行下面的操作
+        //     if (option != null) {
+        //         //循环遍历需要克隆对象,使用for  in语句
+        //         for (var prop in option) {
+        //             //将两个对象中的元素进行遍历
+        //             var src = option[prop]
+        //             var copy = target[prop]
+        //             if (copy && typeof copy == 'object') {
+        //                 if (Object.prototype.toString.call(copy) == '[object Array]') {
+        //                     src = []
+        //                 } else {
+        //                     src = {}
+        //                 }
+        //                 //使用递归的操作循环执行上面的操作
+        //                 target[prop] = deepClone(src, copy)
+        //             } else {
+        //                 target[prop] = src
+        //             }
+        //         }
+        //     }
+        //     return target
+        // }
+
+        // Array.prototype.myMap = function (fn) {
+        //     var arr = []
+        //     for (var i = 0; i < this.length; i++) {
+        //         //如果数组内部是一个对象，就得进行判读，然后进行克隆
+        //         if (this[i] && typeof this[i] == 'object') {
+        //             var obj = {}
+        //             deepClone(obj, this[i])
+        //             arr.push(fn(obj, i))
+        //         }else{
+        //             arr.push(fn(this[i],i))
+        //         }
+        //     }
+        //     return arr
+        // }
+
+
+        // var newArr = array.myMap(function(ele,index){
+        //     if(ele.sex == 'g'){
+        //         ele.GF = true
+        //     }else{
+        //         ele.BY = false
+        //     }
+        //     return ele
+        // })
+
+        // console.log(newArr)
+
+        //深度克隆
+        // function deepClone(target,option){
+        //     //首先判断克隆额内容是否为空，如果不是空就执行下面的操作
+        //     if(option != null){
+        //         //循环遍历需要克隆对象,使用for  in语句
+        //         for(var prop in option){
+        //             //将两个对象中的元素进行遍历
+        //             var src = option[prop]
+        //             var copy = target[prop]
+        //             if(copy && typeof copy == 'object'){
+        //                 if(Object.prototype.toString.call(copy) == '[object Array]'){
+        //                     src = []
+        //                 }else{
+        //                     src = {}
+        //                 }
+        //                 //使用递归的操作循环执行上面的操作
+        //                 target[prop] = deepClone(src,copy)
+        //             }else{
+        //                 target[prop] = src
+        //             }
+        //         }
+        //     }
+        //     return target
+        // }
+
+        // var obj1 = {}
+        // var obj2 = {
+        //     name: 'lucy',
+        //     set: {
+        //         bg: 'bg'
+        //     }
+        // }
+        // deepClone(obj1,obj2)
+        // console.log(obj1)
+
+        //reduce()和reduceRight()使用指定的函数将数组元素进行求和,因此reduce常用于累加求和，reduceRight表示从右向左进行下面的操作
+        //reduce原理
+        Array.prototype.myReduce = function(fn,init){
+            var previous,k
+            if(init === undefined){
+                previous = this[0]
+                k = 1
+            }else{
+                previous = init
+                k = 0   
+            }
+            for(k ; k < this.length; k++){
+                previous = fn(previous,this[k],k)
+            }
+            return previous
+        }
+
+        //在reduce中，第一个参数位置表示执行操作后，化简的值(即return后的值)，第二参数表示数组中的元素
+        var arr = [1,3,4,5,6]
+        var t =  arr.myReduce(function(prev,ele,value){
+            console.log(ele)
+            return ele
+        },10)
+        //当返回的是ele时
+        //当没有传入参数时prev    ele 当传入参数之后  prev   ele
+        //                1       3                10      1
+        //                3       4                 1      3
+        //                4       5                 3      4
+        //                5       6                 4      5
+        //                6                         5      6
+        //                                          6
+    </script>
+</body>
+
+</html>
