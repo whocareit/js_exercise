@@ -47,10 +47,12 @@ function filterText(text,arr){
 
 //根据性别对数组进行筛选
 function filterSex(sex,arr){
+    //直接在标签中设置sex属性,然后用获取到的数据来进行判断
     if(sex == 'a'){
         return arr
     }else{
         return arr.filter(function(ele,index){
+            //注意数组的filter方法，其返回的结果是根据true或者是false来进行新的数组的更换
             return ele.sex == sex
         })
     }
@@ -65,7 +67,9 @@ Sex.addEventListener('click',function(e){
             spanArray[i].className = ' ';
         }
         e.target.className = 'active'
+        //根据节点获取到标签中有的属性
         sex = e.target.getAttribute('sex')
+        //将数组进行多次筛选
         var lastArr = filterText(text,array)
         renderElement(filterSex(sex,lastArr))
     }
