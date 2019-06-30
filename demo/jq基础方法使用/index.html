@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        /* .wrapper{
+            border: 1px solid #ccc;
+            width: 400px;
+            height: 300px;
+        }
+        .item{
+            width: 100px;
+            height: 100px;
+            line-height: 100px;
+            text-align: center;
+            cursor: pointer;
+        }
+        .item1{
+            background-color: red;
+        }
+        .item2{
+            background-color: blue;
+        }
+        button{
+            margin-top: 10px;
+            margin-left: 10px;
+            display: block;
+            border: none;
+            outline: none;
+            width: 50px;
+            height: 30px;
+            border-radius: 8px;
+            background-color: #ccc;
+            cursor: pointer;
+        } */
+    </style>
+</head>
+
+<body>
+    <!-- 使用eq()与insertBefore与before的层级结构
+        <ul>
+        <li>1</li>
+        <li>2</li>
+        <li>3</li>
+        <li>4</li>
+        <li>5</li>
+    </ul> -->
+
+    <!-- <div class="wrapper">
+        <div class="item1 item">item1</div>
+        <div class="item2 item">item2</div>
+    </div>
+    <button>click</button> -->
+
+    <!-- <input type="text" /> -->
+    <script src="./jquery-3.4.1.js"></script>
+    <script>
+            //attr()当直接调用这个方法，并传入一个参数的时候就相当于，你去获取到调用该方法的节点的属性值。
+            // attr()当直接调用这个方法，并且向其内部传入两个参数时，相当于你给使用这个方法的节点去赋值一个属性值
+
+            // prop()作用与上面的attr相似，不同的是其返回的结果是true或者是false
+
+            // html()与原生的innerHTML作用相同，都是强制将内部的字符串中还有标签的内容进行强制转化，同上面所述的使用
+            // 方法类似，当向其内部去传入值，然后就会将其内部中的内容进行转化
+            // text()与原生的innerTEXT方法类似，不能强制的去转化内部字符串，调用该方法就只是去将js中的字符串输出打印到
+            // 页面上
+
+            // css()方法，如果向其内部传入两个参数例如css('color','red')表示的意思是就是改变调用该方法节点的样式，如果是多
+            // 个的样式进行设置就像css()内部传入一个对象css({'color' : 'red', 'background-color' : 'black'})如果实例一样即可
+
+            // removeClass()去移除掉节点中的class属性名称,如果向其内部传入属性的名称，就只删除掉对应的class属性名称,如果
+            // 不向其内部传入任何一个参数，调用该方法，表示去删除掉该节点中的所有class属性
+            // addClass()，向节点中去设置属性的名称
+            //在removeClass()和addClass()中，可以向这个方法的内部传入参数，只不过最后返回的内部必须是一个字符串，用于来当做class名
+            //toggleClass()检查节点中是否含有该参数中的属性名，如果有就删除，如果没有就添加
+
+            // eq()，在其内部传入参数为index时，就能找到相应节点的位置
+         
+        //对于eq()的两种用法
+        // $('li:eq(0)').css('color','red')
+        // $('li').eq(2).css('color','blue')
+
+        //A.insertBefore(B)将A插入到B之前，具有剪切的功能；A.before(B)表示的意思是B在A的前面，可以理解成A后面的节点是B
+        // $('li').eq(4).insertBefore($('li:eq(0)')).css('color','blue')//在此时操作的是li中的索引值为4的li
+        // $('li:eq(0)').before( $('li').eq(4)).css('color','red')//此时操作的是li中的索引值为0的li
+
+        // $('p').appendTo('.wrapper')//表示将A中的节点插入到B之后的最后一个节点
+        // $('.wrapper').append($('p'))//表示在A之后添加一个新的节点
+
+        //这里所有说的就是remove()与detach()的区别，两者的不同就是remove()方法去移除时，会取消掉这个事件的绑定，而detach不会，两者的作用
+        //是把元素删除后返回
+        // $('.item1').click(function(){
+        //     item1 = $(this).remove()
+        // })
+        
+        // $('.item2').click(function(){
+        //    item2 =  $(this).detach()
+        // })
+        // $('button').click(function(){
+        //     $('.wrapper').append(item1).append(item2)
+        // })
+
+        //on()，用于时间的绑定里面有四个参数
+        //下面这种方式是on()方法中传入两个参数时的使用方法
+        // $('.item1').on('click',function(e){
+        //     console.log('item1')
+        // })
+        //当on()传入三个参数时,当第二个参数为数组或者是对象时，在回调函数中去传入参数e，然后使用e.data去调用时
+        //能够输出打印出第二个参数；当第二个参数是字符串是，其就会被理解为事件源，只有点击该事件源时，才会有点击事件
+        // $('.item1').on('click', {name: '123'} ,function(e){
+        //     console.log(e.data.name)
+        // })
+        //off()解除事件绑定
+        // $('.item1').off('click')
+
+        //one()只绑定一次事件
+        // $('.item1').one('click',function(){
+        //     console.log('item1')
+        // })
+
+        //在jq当中去添加标签的方法
+        // $('.wrapper').append('<div class = "item3">item3</div>')
+
+        //scrollTo()滚动出去的高度：$(window).scrollTo()
+
+        //innerWidth() 表示调用该方法的dom节点的宽度，其宽度包括 content padding
+        //outerWidth() 。。。。。。。。。。。。。。。，其宽度包括 content padding border,当在这个方法的内部传入true时，其宽度还包括margin
+
+        //jquery事件
+        //1.事件对象   e.pageX相对于文档而言的宽度, e.client相对于浏览器而言的宽度  e.which表示键盘输入的那个按键  e.button那个鼠标俺就被按下
+        //e.sereenY表示距离电脑窗口的高度
+        // $('body').click(function(e){
+        //     console.log(e.pageY)
+        //     console.log(e.clientY)
+        //     console.log(e.screenY)
+        // })
+
+        //防止默认事件触发e.prevenDefault e.stopPropagation()  return false
+        // $('input').on('mousedown contentmune' , function(e){
+        //     e.preventDefault();
+        //     console.log(e.button)
+        // })
+
+
+        //offset().left / offset().top相对与浏览器窗口定位，position().left/top，相对于有定位的父级进行定位
+    </script>
+</body>
+
+</html>

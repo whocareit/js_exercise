@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        .dg{
+            width: 100px;
+            height: 100px;
+            background-color: red;
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
+        .ds{
+            width: 100px;
+            height: 100px;
+            background-color: orange;
+            position: absolute;
+            top: 0;
+            left: 400px;
+        }
+        .es{
+            width: 100px;
+            height: 100px;
+            background-color: blue;
+            position: absolute;
+            top: 400px;
+            left: 400px;
+        }
+    </style>
+</head>
+<body>
+    <!--parent() parents() offsetParent() closest()使用的层级
+         <ul>
+        <div class="demo">
+            <li>
+                <div class="item">
+                    <p>
+                        <span>span</span>
+                    </p>
+                </div>
+            </li>
+        </div>
+    </ul> -->
+    <!--wrap() unwrap() empty()等方法的操作例子的布局样式结构
+        <ul>
+        <li>1
+            <span>span</span>
+        </li>
+        <li>2</li>
+        <li>3</li>
+        <li>4</li>
+        <li>5</li>
+    </ul> -->
+
+    <!-- serialize() serializeArray()的层级结构布局
+        <form>
+        <input type="text" name = 'username'/>
+        <input type="text" name = 'password'>
+        <input type="submit">
+    </form> -->
+
+    <div class="dg"></div>
+    <div class="ds"></div>
+    <div class="es"></div>
+    <script src="./jquery-3.4.1.js"></script>
+    <script>
+        // //parent()获取到调用该节点的直接父级，offsetParent()获取到调用该方法的有定位的父级，parents()返回父级当中的所有标签
+        // //在第一个方法中如果像里面传入标签名，如果直接父级有则返回该标签数组，如果没有则返回一个空数组
+        // //parents()传入参数与parent()传入参数是相同的
+        // console.log($('span').parent())
+        // console.log($('span').parents('div'))
+        // console.log($('span').offsetParent())
+        // //closest()查找父级中的节点，且必须向其内部传入查到的参数的类型，例如向其内部传入一个div
+        // console.log($('span').closest('div'))
+
+        //each方法，与blur事件,在each方法中，其与原生中的forEach效果一样，但是在其函数的内部传入的参数不同在each()方法中，其内部的function
+        //第一个参数表示的意思index，第二个参数才是ele通常情况下，是不会去使用第一个参数，第二个参数在使用的时候，通常使用this来替代
+        // $('li').each(function(index){
+        //     console.log($(this))
+        // })
+
+        //siblings()当前元素节点的所有兄弟节点  prevAll()当前元素上面的所有兄弟节点  nextAll()当前元素下面的所有兄弟节点
+        // console.log($('li:eq(0)').siblings().css('color','red'))
+        // console.log($('li:eq(2)').prevAll().css('color','blue'))
+        // console.log($('li:eq(2)').nextAll().css('color','blue'))
+
+        //prevUntil()  nextUntil()去头截尾取中间,传入的参数是jq对象或者是dom节点
+        // console.log($('li:eq(2)').prevUntil($('li:eq(0)')).css('color','red'))
+        // console.log($('li:eq(2)').nextUntil($('li:eq(4)')).css('color','blue'))
+
+        //clone()克隆对象，当内部传入的参数为true时，会克隆这个jq对象
+        // t =  $('li:eq(0)').clone()
+        // $('li:eq(2)').append(t)
+
+        // t =  $('li:eq(0)').click(function(){
+        //     $(this).css('color','orange')
+        // }).clone(true)
+        // $('li:eq(2)').append(t)
+
+        //wrap()对调用该节点的外部进行包裹,wrapInner()对调用该方法的节点内部进行包裹.在其方法的内部传入的参数是function
+        //函数内部的第一个参数表示index
+        // $('li').wrap(function(index){
+        //     if(index%3 == 0){
+        //         return '<div>'
+        //     }
+        // })
+        // $('li').wrapInner(function(index){
+        //     if(index%3 == 0){
+        //         return '<div>'
+        //     }
+        // })
+
+        //wrapAll()包裹选中的所有元素，但是会破坏其结构，其方法内部传入标签名即可,在调用其时还需要注意一个原则，
+        //当选中的被选中包裹时，最先找到的将会作为第一个被包裹的元素，后面的元素就会在其后面被包裹
+        // unwrap()，将选中的元素外部的包裹元素进行剔除，但是结构化标签不会被剔除，结构化标签由html body head 等
+        //console.log( $('li').unwrap().unwrap())
+
+        //end()表示回退到上一级,在这里需要注意的是eq()必须是写在$('li')之后，其表示的是所有的为li的元素标签
+        // $('li').eq(1).css('color','blue').end().eq(4).css('color','red')
+
+        //empty()方法，清除掉所有的标签,下面的两种方式所产生的结果是一样的，通常情况下，记住第二种的方式即可
+        // $('ul').empty().html(123)
+        // $('ul').html(123)
+
+        //当在form中直接写入输入框并未输入框写入name值，并写入type = 'submit'时，其提交的方式是get,当使用方式时，会重新的
+        //去刷新一次页面并且在网址输入栏后返回字符串形式的?username=qe&password=123，为了避免这个刷新的过程，可以使用
+        //serialize()来进行 serializeArray()此时打印的是一个数组，用于去存放button中的name
+        // $('input:eq(2)').click(function(e){
+        //     e.preventDefault()//阻止默认事件
+        //     console.log($('form').serialize())
+        // })
+        // $('input:eq(2)').click(function(e){
+        //     e.preventDefault()//阻止默认事件
+        //     console.log($('form').serializeArray())
+        // })
+
+        //animate(),在其方法的内部有三个参数，第一个参数是传入的对象，对象中的内部是所有变化到的样式，第二个参数是变化过程中所
+        //需要的时间，第三个参数是变化过程中的变化趋势是什么
+        //在jquery.easing.js这个第三方库中，还有很多变换的速度，可以通过去引入它，并在这里进行使用
+        // $('.wrapper').animate({left: 400 , top : 300, width: 300, height: 300} ,2000 , 'linear')
+
+        // $('.dg').animate({left : 400},3000,'linear',function(){
+        //     $(this).animate({left : 400 ,top : 400}, 3000 ,'linear')
+        // })
+
+        //stop()阻止当前运动继续后续运动，stop(true)阻止后续所有运动
+        //stop(true,true)停止当前所有运动， 停在当前目标点
+        //stop(false,true)跳过当前运动并到达目标点，执行后续操作
+        //finish()停止当前运动 并且达到最后运动的目标
+        // //delay()延迟参数拖延时间
+        // $(document).click(function(){
+        //     // $('.dg').stop()
+        //     // $('.dg').stop(false,true)
+        //     // $('.dg').finish()
+        //     $('.dg').delay(3000)
+        // })
+
+        //slideToggle(speed,callback)如果元素是可见的就隐藏，如果元素是不可见的就显现
+        //slideDomn()通过滑动效果，向下划动显示
+        //slideUp()通过滑动效果，向上划动隐藏
+        // $('.dg').slideDown()
+
+        //trigger()触发自己定义的事件,在其内部还可以传入第二个参数，只不过第二个参数传入的参数形式必须是以数组的形式传入
+        //tigger()触发事件是会事件冒泡，触发li会冒泡到ul当中
+
+        // $('.dg').on('eat',function(){
+        //     console.log(888)
+        // })
+        // $('.dg').trigger('eat')
+
+        // $('.dg').on('eat',function(e,a){
+        //     console.log(a)
+        // })
+        // $('.dg').trigger('eat',[800])
+    </script>
+</body>
+</html>
