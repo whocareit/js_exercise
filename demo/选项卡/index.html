@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        *{
+            padding: 0;
+            margin: 0;
+            list-style: none;
+        }
+        .wrapper{
+            width: 500px;
+            height: 400px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+        }
+        .ul-list{
+            width: 126px;
+            margin: 0 auto;
+            position: relative;
+        }
+        .ul-list li{
+            float: left;
+            width: 40px;
+            height: 40px;
+            border: 1px solid #ccc;
+            line-height: 40px;
+            text-align: center;
+            cursor: pointer;
+        }
+        .ul-show{
+            position: absolute;
+            width: 500px;
+            height: 358px;
+            top: 42px;
+            left: 1px;
+            background-color: orange;
+            line-height: 358px;
+            text-align: center;
+            border-radius: 8px;
+        }
+        .active{
+            background: orange;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="wrapper">
+        <ul class="ul-list">
+            <li class="active">11</li>
+            <li>22</li>
+            <li>33</li>
+        </ul>
+        <div class="ul-show">11</div>
+    </div>
+    <script src="./jquery-3.4.1.js"></script>
+    <script>
+        $('li').click(function(){
+            $('li').removeClass('active')
+            $(this).addClass('active')
+            var t = $(this).html()
+            $('.ul-show').html(t)
+        })
+    </script>
+</body>
+
+</html>

@@ -9,12 +9,10 @@
 <body>
     <script>
         //数组扁平化，将多维的数组转化为一维的数组的过程
-
         //第一种实现数组扁平化的过程，使用for循环来实现整个扁平化的过程
         function isArray(obj){
             return Object.prototype.toString.call(obj) == '[object Array]'
-        }
-
+        } 
         function flatten(arr){
             var arr = arr || []
             var resArr = []
