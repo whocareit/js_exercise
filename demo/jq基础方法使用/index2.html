@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        *{
+            padding: 0;
+            margin: 0;
+        }
+        div{
+            width: 100px;
+            height: 100px;
+            background-color: red;
+        }
+    </style>
+</head>
+<body>
+    <div class="wrapper"></div>
+    <script src = './jquery-3.4.1.js'></script>
+    <script>
+        //$('div).html()这表示实例方法
+        //$.type(arr)像这种定义在方法内部的方法叫做工具方法
+        // function jQuery(){
+
+        // }
+        // jQuery.type = function (){
+        //     console.log(999)
+        // }
+        // jQuery.type()
+
+        // //$.type()此方法用于去判断传入内部参数的类型，这种判断方法是精确的
+        // //在原生js当中判断类型的方法 1. arr instanceof Array  2.arr.constructor == Array  3.Object.prototype.toString.call(arr)
+        // //在原生的js当中第三种判断的方法是准确的，前面的两种方法，不太准备 
+        // // var arr = {} 
+        // var arr = [1,2,3]
+        // //当用下面两种方式进行判断时，判断的结果都为true
+        // console.log(arr instanceof Array)
+        // console.log(arr instanceof Object)
+        // //当使用下面的这种方式去判定时，如果arr是当前页面的子页面时，这种判定方式就不正确
+        // console.log(arr.constructor == Array)
+        // console.log(arr.constructor == Object)
+        // //使用第三种方式如果传入的参数是数组则[object Array]，如果是对象则[object Object]
+        // console.log(Object.prototype.toString.call(arr))
+        // //当使用jq中封装的方式时，也能进行精确的判定
+        // console.log($.type(arr))
+
+        //$.trim()此方法的作用是消除左右两边的空格，中间的空格并不会被消除
+        // var str = '       bs     '
+        // console.log('|'+$.trim(str)+'|')
+
+        // //$.proxy()改变this指向 第一个参数function  第二个参数 函数的执行期上下文
+        // //在proxy()中第三或者第四个中传入参数，这种方式采用柯里化的思想
+        // function show(a,b){
+        //     console.log(this)
+        //     console.log(a + b)
+        // }
+        // obj1 = {
+        //     name: 'dahad'
+        // }
+        // //使用此方法后会return一个函数，并不是函数执行,因此在这里需要去执行它
+        // var cb = $.proxy(show,obj1,2)
+        // cb(3)
+        // var obj = {
+        //     init: function(){
+        //         this.bindEvent()
+        //     },
+        //     bindEvent: function(){
+        //         //此时的this指的是div
+        //         // $('div').click(this.cb(1,2))
+        //         $('div').click($.proxy(this.cb,this,1,2))
+        //     },
+        //     cb: function(a,b){
+        //         console.log(a + ' ' + b)
+        //     },
+        // }
+        // obj.init()
+
+        // //$.noConflict()防止冲突，在很多的js库中都会有像jq一样使用$作为一个函数或变量名，如果我们想同时去使用其他库时
+        // //就可以将$的控制权交给其他的变量
+        // var abs = $.noConflict()
+        // //当交出控制权之后，$便没有之前的效果，则执行下面的语句时，会报错
+        // console.log($('div'))
+
+        //$.parseJSON()字符转换成json，json格式外部用双引号 内部属性用单引号 不需要回车符
+        //在下面的这种方式中就是将json数据进行转化
+        // var obj = {
+        //     "name": 123,
+        //     "student_num": "lier"
+        // }
+        // var str = JSON.stringify(obj)
+        // console.log($.parseJSON(str))
+
+    //     //$.makeArray(),将类数组转化为数组
+    //     // arr = {
+    //     //     aa : 456,
+    //     //     bb : 'asjk'
+    //     // }
+    //     // console.log($.makeArray(arr))
+
+    //     //$.extend()插件扩展新的jq工具方法
+    //     //$.fn.extend()插件扩展新的jq实例方法 $.fn = $.prototeped,在这里fn 相当于prototype
+    //     $.extend({
+    //         aa: function (str){
+    //             var reg = /^\s + /g
+    //             return str.replace(reg,'')
+    //         }
+    //     })
+    //    console.log( $.aa('             h'))
+
+        //$.extend()组合的功能，按照正常的逻辑来说$.extend()就是组合的功能，在之前的实例中就是把后面的对象于$想结合起来了
+        // var obj1 = {
+        //     person1: {
+        //         name : 'dog',
+        //         age : 12
+        //     },
+        //     number: 1
+        // }
+        // var obj2 = {
+        //     person2: {
+        //         name: 'cat',
+        //         age: 6
+        //     },
+        //     number:2
+        // }
+        // //此时输出打印的对象是将两者相组合起来放在了obj1中，其中在obj1中的number被obj2的number所覆盖掉了
+        // //当给$.extend(ture,obj1,obj2)这给方法中传入的第一个参数为true时，执行的组合过程就是深拷贝过程
+        // $.extend(true,obj1,obj2)
+        // obj2.person2.age = 10
+        // //此时打印出来的结果为10，这就说明之前的组合时拿到了person2的索引值，执行的时浅拷贝的过程
+        // console.log(obj1.person2.age)
+
+        //$.Callbacks()重新管理函数队列
+        // function fn1(){
+        //     console.log('fn1')
+        // }
+        // function fn2(){
+        //     console.log('fn2')
+        //     return false
+        // }
+        // function fn3(){
+        //     console.log('fn3')
+        // }
+        //下面的三个方法是一个套用的过程,Callbacks()有四个参数,各个参数还可以组合一起使用
+        //once 只执行一次fire()方法 memory()记忆 unique oCb.add(fn1,fn1,fn1)只执行一次fn1
+        // var cb = $.Callbacks()
+        // cb.add(fn1,fn2,fn3)
+        // cb.fire()
+        //当传入unique时，重复的函数只执行最初那一次
+        // var cb = $.Callbacks('unique')
+        // cb.add(fn1,fn1,fn1)
+        // cb.fire()
+        //当传入的参数为memorize时，会记忆之前的行为
+        // var cb = $.Callbacks('memory')
+        // cb.add(fn1)
+        // cb.add(fn2)
+        // cb.fire()
+        // //此时会去执行fn3
+        // cb.add(fn3)
+        //stopOnFlase，函数执行的函数中如果return false 则之后的函数就不会被执行
+        // var cb = $.Callbacks('stopOnFalse')
+        // cb.add(fn1)
+        // cb.add(fn2)
+        // cb.add(fn3)
+        // cb.fire()
+
+        //Deferred()延迟对象，有状态
+        //添加函数 done fail progress  触发函数resolve  reject  notify
+        //dtd = $.Deferred()
+        //dtd.resolve -> dtd.done(function(){})  dtd.reject -> dtd.fail(function(){})  dtd.notify -> dtd.progress(function(){})
+
+        
+        function aa(){
+            var dtd = $.Deferred() 
+            dtd.resolve()
+            return dtd.promise()
+        }
+        function bb(){
+            var dtd = $.Deferred() 
+            dtd.resolve()
+            return dtd.promise()
+        }
+        var b1 = aa()
+        var b2 = bb()
+        //只有当b1和b2都成功时，才会返回出正确的axios请求
+        $.when(b1,b2)
+        .done(function(){
+            console.log('ok')
+        })
+        .fail(function(){
+            console.log('fail')
+        })
+        .progress(function(){
+            console.log('doing')
+        })
+
+
+    </script>
+</body>
+</html>
