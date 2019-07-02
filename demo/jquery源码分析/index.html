@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="demo"></div>
+    <!-- <script src="./jquery-3.4.1.js"></script> -->
+    <script>
+
+        //jq中的方法执行是在jq的prototype执行的过程,在这里实现jq中init方法
+        function jQuery(selector){
+            //在这里必须去使用返回一个对象的形式，将jquery的prototype指向init中，通过该对象返回一个类数组
+            return new jQuery.prototype.init(selector)
+        }
+        //原型上的init方法最后返回出的是一个类数组
+        jQuery.prototype = {
+            init : function (selector){
+                var dom = document.getElementById(selector)
+                //此时需要返回出一个类数组，其中必须包裹返回的元素与其长度，因此在这里需要去实现这个过程
+                this[0] = dom
+                this.length = 1
+                return this
+            },
+            css : function (){
+                console.log(888)
+                return this
+            },
+            html : function(){
+                console.log('html')
+            }
+        }
+        //此时如果这样直接去调用jQuery原型上的对象css时，是不行的，因为在实现init的时候，其原型是指向的init的原型，
+        //而init的原型指向的是object这时，需要将init上的原型指向jQuery
+        //jQuery('demo').css()
+        jQuery.prototype.init.prototype = jQuery.prototype
+        //此时再去调用css是可行的,如果链式的去调用html,需要在前一次执行完之后返回之前的对象，如果不这样则执行完jQuery('demo').css()
+        //返回的结果为undefined
+        jQuery('demo').css().html()
+
+
+        // //jq库的封装，在jq库中，封装的方式采用的是立即执行函数的形式进行封装，在其内部是对外部传入的参数
+        // //进行判断，然后再第二个参数中传入的是一个function执行的一系列方法执行操作
+        // (function (glabal, factor) {
+        //     //在其内部进行参数的处理
+        //     if (typeof module === "object" && typeof module.exports === "object") {
+        //         module.exports = global.document ?
+        //             factory(global, true) :
+        //             function (w) {
+        //                 if (!w.document) {
+        //                     throw new Error("jQuery requires a window with a document");
+        //                 }
+        //                 return factory(w);
+        //             }
+        //     } else {
+        //         factory(global);
+        //     }
+        // })(typeof window != 'undefined' ? window : this, function (window, noGlobal) {
+        //     //以下部分就是对函数处理的部分
+        // })
+    </script>
+</body>
+
+</html>
