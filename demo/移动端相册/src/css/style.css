@@ -1,0 +1,43 @@
+*{
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+html,body{
+    width: 100%;
+    height: 100%;
+    background-color: #000;
+    /* 将font-size设置为零，就能解决掉图片之间间隔问题 */
+    font-size: 0;
+}
+.ul-wrapper{
+    width: 100%;
+}
+.ul-wrapper li{
+    width: 25%;
+    display: inline-block;
+    padding: 3px;
+    box-sizing: border-box;
+    overflow: hidden;
+}
+.ul-wrapper img{
+    width: 100%;
+    height: 100%;
+}
+.show{
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #000;
+    display: none;
+}
+.show img{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    /* translate() 方法，元素从其当前位置移动，根据给定的 left（x 坐标） 和 top（y 坐标） 位置参数： */
+    transform: translate(-50%,-50%);
+    opacity: 0;
+}
