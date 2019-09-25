@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        // 深拷贝
+        //执行逻辑
+        // 1. 遍历所有对象中的内容判断其是否为原始对象
+        // 2. 如果为原始对象就直接进行赋值过程，否则进行判断该属性为对象还是数组
+        // 3. 用递归循环实现
+        var obj = {
+            name: 'lisi',
+            age: 24,
+            wife: {
+                name: 'zhangsan',
+                age: 23
+            },
+            son: ['one','two','three']
+        }
+        var obj1 = {}
+        function deepClone(origin,target){
+            // 兼容性处理
+            var target = target || {}
+            var arrStr = "[object Array]";
+            var toStr = Object.prototype.toString;
+            for(var prop in origin){
+                if(origin.hasOwnProperty(prop)){
+                    if(origin[prop] !== 'null' && typeof(origin[prop]) == 'object'){
+                        if(toStr.call(origin[prop]) === arrStr){
+                            target[prop] = []
+                        }else{
+                            target[prop] = {}
+                        }
+                        deepClone(origin[prop],target[prop])
+                    }else{
+                        target[prop] = origin[prop]
+                    }
+                }
+            }
+            return target
+        }
+        console.log(deepClone(obj,obj1))
+    </script>
+</body>
+</html>
